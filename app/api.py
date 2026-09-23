@@ -265,6 +265,12 @@ def dashboard(conn: Any = Depends(get_db), _: dict = Depends(current_user)) -> d
     }
 
 
+@app.get("/health")
+def health() -> dict[str, str]:
+    """Liveness probe used by the Docker HEALTHCHECK and Codespaces."""
+    return {"status": "ok"}
+
+
 @app.get("/")
 def index() -> FileResponse:
     return FileResponse(STATIC_DIR / "index.html")

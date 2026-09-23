@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      # Los datos persisten entre reinicios del contenedor.
+      - bodega-data:/app/data
+    environment:
+      # Cambia esto por una clave propia; firma la cookie de sesión.
+      SECRET_KEY: "cambia-esta-clave"
+    restart: unless-stopped
+
+volumes:
+  bodega-data:

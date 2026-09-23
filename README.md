@@ -40,6 +40,27 @@ absorbe el resto, así que `neto + IVA == bruto` exactamente.
 
 ## Puesta en marcha
 
+### Opción 1 — Docker (recomendada, no dependes de nada más)
+
+```bash
+git clone https://github.com/Freddyohlo/inventario_2.git
+cd inventario_2
+docker compose up --build
+```
+
+Abre <http://localhost:8000>. El contenedor siembra los datos de ejemplo la
+primera vez y los conserva entre reinicios en un volumen. Corre como usuario sin
+privilegios y trae `HEALTHCHECK`.
+
+Sin compose:
+
+```bash
+docker build -t bodega .
+docker run --rm -p 8000:8000 -v bodega-data:/app/data -e SECRET_KEY=cambia-esto bodega
+```
+
+### Opción 2 — Python local
+
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
@@ -51,15 +72,26 @@ python -m app.seed
 uvicorn app.api:app --reload
 ```
 
-Abre <http://127.0.0.1:8000> e ingresa con:
+### Opción 3 — GitHub Codespaces (sin instalar nada en tu equipo)
+
+En GitHub: **Code → Codespaces → Create codespace on main**. El devcontainer
+instala dependencias, siembra datos y arranca la app; el puerto 8000 se reenvía
+y se abre la vista previa. Ver `.devcontainer/devcontainer.json`.
+
+> Nota: **GitHub Pages no sirve para esto.** Pages solo publica archivos
+> estáticos, y esta app necesita un servidor Python con su base de datos. Por eso
+> las vías de demo pública son Codespaces, Docker en tu máquina o un hosting con
+> contenedores.
+
+Los usuarios se crean solos la primera vez que arranca la app (o al correr el
+seed). Se pueden cambiar con `ADMIN_USER` y `ADMIN_PASSWORD`.
+
+### Usuarios
 
 | Usuario | Clave | Rol |
 | --- | --- | --- |
 | `admin` | `admin123` | Administrador |
 | `vendedor` | `vende123` | Vendedor |
-
-Los usuarios se crean solos la primera vez que arranca la app (o al correr el
-seed). Se pueden cambiar con `ADMIN_USER` y `ADMIN_PASSWORD`.
 
 ### Variables de entorno
 
@@ -104,6 +136,9 @@ app/
 static/       Frontend (HTML, CSS y JS, sin build step)
 tests/        Pruebas de dinero, dominio, auth y API
 scripts/      smoke.py
+Dockerfile            Imagen de la app (multi-stage, usuario sin privilegios)
+docker-compose.yml    Arranque en un comando, con volumen para los datos
+.devcontainer/        Codespaces: instala, siembra y arranca solo
 ```
 
 ## Estructura de la interfaz

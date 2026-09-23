@@ -27,3 +27,25 @@ jobs:
           done
       - name: Live smoke test
         run: python scripts/smoke.py http://127.0.0.1:8000
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the image
+        run: docker build -t bodega:ci .
+      - name: Start the container
+        run: |
+          docker run -d --name bodega -p 8000:8000 -e SECRET_KEY=ci bodega:ci
+          for _ in $(seq 1 30); do
+            curl -sf http://127.0.0.1:8000/health > /dev/null && break
+            sleep 1
+          done
+      - name: Smoke test the container
+        run: python3 scripts/smoke.py http://127.0.0.1:8000
+      - name: Container runs as non-root
+        run: test "$(docker exec bodega id -un)" != "root"
+      - name: Container logs on failure
+        if: failure()
+        run: docker logs bodega
+
