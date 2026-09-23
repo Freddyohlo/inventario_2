@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+
+.venv/
+venv/
+
+# Local database and seeded demo data
+data/
+*.db
+
+# Tooling
+.pytest_cache/
+.coverage
+htmlcov/
+.DS_Store

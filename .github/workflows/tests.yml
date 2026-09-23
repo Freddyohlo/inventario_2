@@ -1,0 +1,29 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+      - name: Run tests
+        run: pytest -q
+      - name: Seed and boot the app
+        run: |
+          python -m app.seed
+          uvicorn app.api:app --host 127.0.0.1 --port 8000 &
+          for _ in $(seq 1 20); do
+            curl -sf http://127.0.0.1:8000/ > /dev/null && break
+            sleep 0.5
+          done
+      - name: Live smoke test
+        run: python scripts/smoke.py http://127.0.0.1:8000
