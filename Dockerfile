@@ -29,7 +29,8 @@ USER appuser
 
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s \
-    CMD python -c "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/health').read()" || exit 1
+    CMD python -c "import os,urllib.request;urllib.request.urlopen('http://127.0.0.1:'+os.environ.get('PORT','8000')+'/health').read()" || exit 1
 
 # Siembra datos de ejemplo solo si la base está vacía, y luego arranca.
-CMD ["sh", "-c", "python -m app.seed && uvicorn app.api:app --host 0.0.0.0 --port 8000"]
+# El puerto lo toma de PORT (Render) o usa 8000 por defecto.
+CMD ["sh", "scripts/start.sh"]

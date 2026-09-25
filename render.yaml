@@ -1,0 +1,25 @@
+# Blueprint de Render para el demo de Bodega.
+# En Render: New > Blueprint > elegir este repo. Render lee este archivo y crea
+# el servicio con el disco persistente ya configurado.
+#
+# Nota: el plan 'starter' del disco persistente es de pago. Si usas el plan free
+# del servicio, la base de datos se reinicia en cada despliegue o reinicio
+# (para un demo está bien; para datos reales, usa disco persistente).
+
+services:
+  - type: web
+    name: bodega-demo
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: DB_PATH
+        value: /app/data/inventario.db

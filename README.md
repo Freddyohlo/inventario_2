@@ -83,6 +83,27 @@ y se abre la vista previa. Ver `.devcontainer/devcontainer.json`.
 > las vías de demo pública son Codespaces, Docker en tu máquina o un hosting con
 > contenedores.
 
+### Opción 4 — Render (demo pública)
+
+El repo trae un blueprint (`render.yaml`) listo para desplegar:
+
+1. En [Render](https://render.com): **New → Blueprint**.
+2. Elige este repositorio. Render detecta `render.yaml` y crea el servicio.
+3. Cuando pida `ADMIN_PASSWORD`, escribe la clave que quieras para el admin.
+
+Ya viene configurado con `healthCheckPath: /health` y la variable `PORT`, que
+Render inyecta automáticamente. `SECRET_KEY` se genera sola.
+
+> ⚠️ En el **plan free** el contenedor se duerme por inactividad (despierta en
+> ~30 s al entrar) y **la base de datos no persiste** entre reinicios, porque el
+> disco persistente es de pago. Para un demo está bien; para datos reales, activa
+> un disco persistente o usa una base externa.
+
+### Opción 5 — Cualquier hosting con contenedores
+
+El `Dockerfile` respeta la variable `PORT`, así que funciona tal cual en Railway,
+Fly.io o cualquier plataforma que ejecute contenedores.
+
 Los usuarios se crean solos la primera vez que arranca la app (o al correr el
 seed). Se pueden cambiar con `ADMIN_USER` y `ADMIN_PASSWORD`.
 
