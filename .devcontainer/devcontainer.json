@@ -1,0 +1,35 @@
+{
+  "name": "Bodega — inventario demo",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": { "version": "latest" }
+  },
+
+  "postCreateCommand": "pip install -r requirements.txt && python -m app.seed",
+
+  // Arranca la app y abre la vista previa en el navegador del Codespace.
+  "postAttachCommand": {
+    "app": "uvicorn app.api:app --host 0.0.0.0 --port 8000 --reload"
+  },
+
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "Bodega",
+      "onAutoForward": "openPreview",
+      "visibility": "public"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["tests"]
+      }
+    }
+  }
+}
