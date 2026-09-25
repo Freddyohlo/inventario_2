@@ -83,7 +83,16 @@ y se abre la vista previa. Ver `.devcontainer/devcontainer.json`.
 > las vías de demo pública son Codespaces, Docker en tu máquina o un hosting con
 > contenedores.
 
-### Opción 4 — Render (demo pública)
+### Opción 4 — Demo visual estática (sin backend)
+
+Para **mostrar la interfaz** sin levantar servidor ni base de datos, está el
+directorio **`demo/`**: es el mismo frontend con los datos en un JSON local y las
+escrituras bloqueadas. Carga al instante y se despliega en Vercel como sitio
+estático.
+
+> Solo muestra: no crea, modifica ni guarda datos. Detalles en `demo/README.md`.
+
+### Opción 5 — Render (app completa)
 
 El repo trae un blueprint (`render.yaml`) listo para desplegar:
 
@@ -99,7 +108,7 @@ Render inyecta automáticamente. `SECRET_KEY` se genera sola.
 > disco persistente es de pago. Para un demo está bien; para datos reales, activa
 > un disco persistente o usa una base externa.
 
-### Opción 5 — Cualquier hosting con contenedores
+### Opción 6 — Cualquier hosting con contenedores
 
 El `Dockerfile` respeta la variable `PORT`, así que funciona tal cual en Railway,
 Fly.io o cualquier plataforma que ejecute contenedores.
