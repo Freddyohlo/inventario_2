@@ -5,7 +5,7 @@ __pycache__/
 venv/
 
 # Local database and seeded demo data
-data/
+/data/
 *.db
 
 # Tooling
